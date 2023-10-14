@@ -23,7 +23,6 @@ struct grove_multichannel_gas_v2_data {
 
 struct grove_multichannel_gas_v2_config {
 	struct i2c_dt_spec i2c;
-	int vref_mv;
 };
 
 static int grove_multichannel_gas_v2_read_gas_sensor(const struct i2c_dt_spec *i2c,
@@ -116,7 +115,6 @@ static int grove_multichannel_gas_v2_init(const struct device *dev)
 									       \
 	static const struct grove_multichannel_gas_v2_config config_##i = {    \
 		.i2c = I2C_DT_SPEC_INST_GET(i),				       \
-		.vref_mv = DT_INST_PROP(i, vref_mv),			       \
 	};								       \
 									       \
 	DEVICE_DT_INST_DEFINE(i, grove_multichannel_gas_v2_init, NULL,	       \

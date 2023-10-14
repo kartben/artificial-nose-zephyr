@@ -1,9 +1,3 @@
 compatible: "seeed,grove-multichannel-gas-v2"
 
 include: [sensor-device.yaml, i2c-device.yaml]
-
-properties:
-  vref-mv:
-    default: 3300
-    type: int
-    description: Corresponds to the voltage used to supply power to the multichannel gas sensor.
