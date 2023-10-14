@@ -1,4 +1,4 @@
-&i2c1 {
+&grove_i2c1 {
 	status = "okay";
 
 	gas_sensor: gas_sensor@08 {

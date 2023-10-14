@@ -27,9 +27,7 @@ int main(void)
 	int i = 0;
 	while (1)
 	{
-		printk("HELLO WORLD %d\n", i++);
-
-		k_sleep(K_MSEC(1000));
+		k_sleep(K_FOREVER);
 	}
 
 	return 0;
