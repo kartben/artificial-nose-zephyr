@@ -10,6 +10,24 @@ menu "Zephyr"
 source "Kconfig.zephyr"
 endmenu
 
+menu "Artificial Nose"
+
 module = APP
 module-str = APP
 source "subsys/logging/Kconfig.template.log_config"
+
+config GAS_SENSOR_SAMPLING_RATE
+        int "Gas sensors sampling rate (Hz)"
+        default 10
+        range 1 100
+        help
+          Set the sampling rate of the gas sensors in Hz.
+
+config GAS_SENSOR_NUM_SAMPLES
+        int "Number of gas sensor samples"
+        default 20
+        range 1 100
+        help
+          Set the number of gas sensor samples used for inference.
+
+endmenu

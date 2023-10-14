@@ -4,7 +4,13 @@
 	gas_sensor: gas_sensor@44 {
 		status = "okay";
 		compatible = "seeed,grove-multichannel-gas-v2";
-		reg = < 0x44 >;
-		vref-mv = < 3300 >;
+		reg = <0x44>;
+	};
+};
+
+/ {
+	i2c-dump-allowlist {
+		compatible = "zephyr,i2c-dump-allowlist";
+		devices = <&gas_sensor>;
 	};
 };
