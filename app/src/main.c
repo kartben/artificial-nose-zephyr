@@ -19,8 +19,16 @@ int main(void)
 			K_THREAD_STACK_SIZEOF(sensor_acquisition_thread_stack),
 			sensor_acquisition_fn,
 			NULL, NULL, NULL,
-			K_PRIO_PREEMPT(0), 0, K_NO_WAIT);
-	k_thread_name_set(&sensor_acquisition_thread, "sensor_acquisition_thread");
+			K_PRIO_PREEMPT(1), 0, K_NO_WAIT);
+	k_thread_name_set(&sensor_acquisition_thread, "Sensor Acquisition");
+
+	// Create GUI thread
+	k_thread_create(&gui_thread, gui_thread_stack,
+			K_THREAD_STACK_SIZEOF(gui_thread_stack),
+			gui_fn,
+			NULL, NULL, NULL,
+			K_PRIO_PREEMPT(5), 0, K_NO_WAIT);
+	k_thread_name_set(&gui_thread, "GUI");
 
 	printk("Zephyr Example Application %s\n", APP_VERSION_STRING);
 

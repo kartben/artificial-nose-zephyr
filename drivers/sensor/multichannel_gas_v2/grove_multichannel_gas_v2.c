@@ -13,7 +13,7 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(GROVE_MULTICHANNEL_GAS_V2, CONFIG_SENSOR_LOG_LEVEL);
 
-#include "drivers/sensor/grove_multichannel_gas_v2.h"
+#include "drivers/sensor/multichannel_gas_v2/grove_multichannel_gas_v2.h"
 
 struct grove_multichannel_gas_v2_data {
 	uint32_t voc;
@@ -29,11 +29,15 @@ struct grove_multichannel_gas_v2_config {
 static int grove_multichannel_gas_v2_read_gas_sensor(const struct i2c_dt_spec *i2c,
 						     uint8_t cmd,
 						     uint32_t *res) {
-	if(i2c_write_read_dt(i2c, &cmd, 1, res, sizeof(res)) < 0) {
+	uint8_t buff[4];
+
+	if(i2c_write_read_dt(i2c, &cmd, 1, buff, sizeof(buff)) < 0) {
 		LOG_ERR("Failed to read gas sensor");
 		return -EIO;
 	}
-	k_sleep(K_MSEC(1));
+	k_sleep(K_MSEC(2));
+
+	*res = (uint32_t)sys_get_le32(buff);
 
 	return 0;
 }

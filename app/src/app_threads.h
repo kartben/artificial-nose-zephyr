@@ -10,6 +10,6 @@ void sensor_acquisition_fn(void *arg1, void *arg2, void *arg3);
 /**********************************/
 /* GUI thread                     */
 /**********************************/
-K_THREAD_STACK_DEFINE(gui_thread_stack, 2048);
+K_THREAD_STACK_DEFINE(gui_thread_stack, 16000);
 struct k_thread gui_thread;
 void gui_fn(void *arg1, void *arg2, void *arg3);
