@@ -1,0 +1,8 @@
+#ifndef __APP_SENSOR_ACQUISITION_H__
+#define __APP_SENSOR_ACQUISITION_H__
+
+#include <zephyr/kernel.h>
+
+#define NUM_SAMPLES CONFIG_GAS_SENSOR_NUM_SAMPLES
+
+#endif /* __APP_SENSOR_ACQUISITION_H__ */

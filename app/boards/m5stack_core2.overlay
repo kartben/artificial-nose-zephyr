@@ -1,7 +1,7 @@
 &i2c1 {
 	status = "okay";
 
-	gas_sensor: gas_sensor@08 {
+	gas_sensor: gas_sensor@8 {
 		status = "okay";
 		compatible = "seeed,grove-multichannel-gas-v2";
 		reg = <0x08>;

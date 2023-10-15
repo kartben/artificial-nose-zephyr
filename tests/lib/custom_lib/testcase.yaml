@@ -1,8 +1,7 @@
 common:
   tags: extensibility
   integration_platforms:
-    - custom_plank
-    - qemu_cortex_m0
+    - wio_terminal
 tests:
   lib.custom_lib: {}
   lib.custom_lib.non_default:

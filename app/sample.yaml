@@ -2,13 +2,13 @@
 # the Zephyr testing tool. In this file, multiple combinations can be specified,
 # so that you can easily test all of them locally or in CI.
 sample:
-  description: Example application
-  name: example-application
+  description: Artificial Nose
+  name: artificial-nose
 common:
   build_only: true
   integration_platforms:
     - m5stack_core2
-    - qemu_cortex_m0
+    - wio_terminal
 tests:
   app.default: {}
   app.debug:
