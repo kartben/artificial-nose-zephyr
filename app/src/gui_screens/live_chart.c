@@ -85,7 +85,7 @@ void create_sensor_chart(lv_obj_t *parent)
 	lv_obj_set_size(inference_result_confidence_meter, 110, 110);
 	lv_obj_set_style_text_font(inference_result_confidence_meter, &lv_font_montserrat_8,
 				   LV_PART_TICKS);
-	lv_obj_set_style_bg_opa(inference_result_confidence_meter, LV_OPA_50, LV_PART_MAIN);
+	lv_obj_set_style_bg_opa(inference_result_confidence_meter, LV_OPA_80, LV_PART_MAIN);
 
 	/*Add a scale first*/
 	lv_meter_scale_t *scale = lv_meter_add_scale(inference_result_confidence_meter);
