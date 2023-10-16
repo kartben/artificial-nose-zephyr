@@ -6,7 +6,7 @@
 /**********************************/
 /* Sensor acquisition thread      */
 /**********************************/
-K_THREAD_STACK_DEFINE(sensor_acquisition_thread_stack, 512);
+K_THREAD_STACK_DEFINE(sensor_acquisition_thread_stack, 1024);
 struct k_thread sensor_acquisition_thread;
 void sensor_acquisition_fn(void *arg1, void *arg2, void *arg3);
 
