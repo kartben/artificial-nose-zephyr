@@ -100,7 +100,7 @@ void inference_fn(void *arg1, void *arg2, void *arg3)
 
 		zbus_chan_pub(&inference_result_chan, &inf, K_MSEC(200));
 
-		k_msleep(50);
+		k_msleep(CONFIG_APP_INFERENCE_PERIOD);
 	}
 }
 
