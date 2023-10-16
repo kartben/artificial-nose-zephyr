@@ -33,23 +33,25 @@ int raw_feature_get_data(size_t offset, size_t length, float *out_ptr)
 		out_ptr[i] = (float)buf[i];
 	}
 
-	// print raw data
-	for (int i = 0; i < EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE; i++) {
-		printk("%03d,", buf[i]);
-	}
-	printk("\n");
-
 	return 0;
 }
 
 ZBUS_CHAN_DECLARE(inference_result_chan);
 
+/**
+ * Entry point for the inference thread.
+ *
+ * This thread is responsible for running inference on the sensor data, using a model trained in
+ * Edge Impulse.
+ * The result of the inference are published on a zbus channel for other threads to
+ * consume (ex. the GUI thread might want to display the results).
+ */
 void inference_fn(void *arg1, void *arg2, void *arg3)
 {
 	ei_impulse_result_t result = {0};
 
 	while (1) {
-		// do not run inference until ring buffer is full
+		/* do not run inference until we have enough data */
 		k_sem_take(&sensor_data_ringbuf_sem, K_FOREVER);
 		if (ring_buf_space_get(&sensor_data_ringbuf) > 0) {
 			k_sem_give(&sensor_data_ringbuf_sem);
@@ -62,13 +64,12 @@ void inference_fn(void *arg1, void *arg2, void *arg3)
 		features_signal.total_length = EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE;
 		features_signal.get_data = &raw_feature_get_data;
 
-		// invoke the impulse
+		/* invoke the impulse */
 		EI_IMPULSE_ERROR res = run_classifier(&features_signal, &result, true);
-		LOG_DBG("run_classifier returned: %d\n", res);
 
 		if (res != 0) {
-			while (1) {
-			}
+			LOG_ERR("run_classifier returned: %d\n", res);
+			continue;
 		}
 
 		LOG_DBG("Predictions (DSP: %d ms., Classification: %d ms., Anomaly: %d "
@@ -82,6 +83,7 @@ void inference_fn(void *arg1, void *arg2, void *arg3)
 		LOG_DBG("    anomaly score: %.3f\n", result.anomaly);
 #endif
 
+		/* Figure out what the strongest prediction is */
 		size_t best_prediction = 0;
 		for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
 			if (result.classification[ix].value >=
@@ -89,6 +91,8 @@ void inference_fn(void *arg1, void *arg2, void *arg3)
 				best_prediction = ix;
 			}
 		}
+
+		/* Make inference result available via dedicated zbus channel */
 		inference_result_msg inf;
 		strncpy(inf.label, result.classification[best_prediction].label, sizeof(inf.label));
 		inf.confidence = result.classification[best_prediction].value;

@@ -15,6 +15,12 @@ const struct device *gas_sensor = DEVICE_DT_GET_ONE(seeed_grove_multichannel_gas
 RING_BUF_DECLARE(sensor_data_ringbuf, EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE);
 K_SEM_DEFINE(sensor_data_ringbuf_sem, 1, 1);
 
+/**
+ * Entry point for the sensor acquisition thread.
+ *
+ * This thread is responsible for fetching sensor data from the gas sensor and storing it in a
+ * ring buffer.
+ */
 void sensor_acquisition_fn(void *arg1, void *arg2, void *arg3)
 {
 	ARG_UNUSED(arg1);
@@ -43,7 +49,7 @@ void sensor_acquisition_fn(void *arg1, void *arg2, void *arg3)
 
 		k_sem_take(&sensor_data_ringbuf_sem, K_FOREVER);
 
-		// If buffer is full, remove the oldest set of samples
+		/* If buffer is full, remove the oldest set of samples */
 		if (ring_buf_space_get(&sensor_data_ringbuf) == 0) {
 			ring_buf_get(&sensor_data_ringbuf, NULL, 4);
 		}

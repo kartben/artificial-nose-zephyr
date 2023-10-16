@@ -8,6 +8,11 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(gui_thread, CONFIG_APP_LOG_LEVEL);
 
+/*
+ * Entry point for the GUI thread.
+ *
+ * This thread is responsible for creating the GUI and running the LVGL event loop.
+ */
 void gui_fn(void *arg1, void *arg2, void *arg3)
 {
 	ARG_UNUSED(arg1);
@@ -15,7 +20,6 @@ void gui_fn(void *arg1, void *arg2, void *arg3)
 	ARG_UNUSED(arg3);
 
 	const struct device *display_dev;
-	// lv_obj_t *hello_world_label;
 
 	display_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_display));
 	if (!device_is_ready(display_dev)) {

@@ -48,7 +48,6 @@ static void sensor_timer_cb(lv_timer_t *timer)
 {
 	uint8_t buffer[16];
 
-	// lv_chart_set_next_value(chart, series[i], sys_rand32_get() % 1000);
 	k_sem_take(&sensor_data_ringbuf_sem, K_FOREVER);
 	int ret = ring_buf_peek(&sensor_data_ringbuf, buffer, 4);
 	k_sem_give(&sensor_data_ringbuf_sem);
