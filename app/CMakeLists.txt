@@ -12,8 +12,11 @@ project(app LANGUAGES C)
 target_sources(app PRIVATE
         src/main.c
         src/sensor_acquisition.c
-        src/gui.c
         src/inference.cpp
+        )
+
+target_sources_ifdef(CONFIG_DISPLAY app PRIVATE
+        src/gui.c
         src/gui_screens/live_chart.c
         )
 

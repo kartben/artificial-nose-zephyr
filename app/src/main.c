@@ -23,7 +23,7 @@ ZBUS_CHAN_DEFINE(inference_result_chan,       /* Name */
 );
 
 /*
- * The main thread is used to initialize and start all the threads that paricipate in the
+ * The main thread is used to initialize and start all the threads that participate in the
  * application.
  *
  * - Sensor acquisition thread
@@ -38,10 +38,12 @@ int main(void)
 			sensor_acquisition_fn, NULL, NULL, NULL, K_PRIO_PREEMPT(1), 0, K_NO_WAIT);
 	k_thread_name_set(&sensor_acquisition_thread, "Sensor Acquisition");
 
+#ifdef CONFIG_DISPLAY
 	/* Create GUI thread */
 	k_thread_create(&gui_thread, gui_thread_stack, K_THREAD_STACK_SIZEOF(gui_thread_stack),
 			gui_fn, NULL, NULL, NULL, K_PRIO_PREEMPT(5), 0, K_NO_WAIT);
 	k_thread_name_set(&gui_thread, "GUI");
+#endif
 
 	/* Create inference thread */
 	k_thread_create(&inference_thread, inference_thread_stack,
