@@ -28,6 +28,11 @@ static lv_palette_t palette_colors[4] = {
 
 static lv_timer_t *sensor_timer;
 
+/**
+ * Zbus callback for inference results
+ *
+ * Called every time a new message is published to the inference result channel
+ */
 static void inference_cb(const struct zbus_channel *chan)
 {
 	struct inference_result_msg msg;
@@ -43,7 +48,10 @@ ZBUS_LISTENER_DEFINE(inference_ui_listener, inference_cb);
 extern struct k_sem sensor_data_ringbuf_sem;
 extern struct ring_buf sensor_data_ringbuf;
 
-/* Timer handler: fetches sensor data and appends it to the chart */
+/**
+ * LVLGL timer handler
+ * Gets sensor data directly from ring buffer and append it to the chart
+ */
 static void sensor_timer_cb(lv_timer_t *timer)
 {
 	uint8_t buffer[16];
@@ -63,7 +71,7 @@ static void sensor_timer_cb(lv_timer_t *timer)
 
 void create_sensor_chart(lv_obj_t *parent)
 {
-	/* Add observer to be notified of new inference results */
+	/* Add zbus observer to be notified of new inference results */
 	zbus_chan_add_obs(&inference_result_chan, &inference_ui_listener, K_MSEC(200));
 
 	chart = lv_chart_create(parent);
