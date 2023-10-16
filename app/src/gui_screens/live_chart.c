@@ -57,7 +57,7 @@ static void sensor_timer_cb(lv_timer_t *timer)
 	}
 
 	for (int i = 0; i < 4; i++) {
-		lv_chart_set_next_value(chart, series[i], buffer[i]);
+		lv_chart_set_next_value(chart, series[i], buffer[i] * 4);
 	}
 }
 
@@ -70,7 +70,7 @@ void create_sensor_chart(lv_obj_t *parent)
 	lv_obj_set_size(chart, LV_HOR_RES, LV_VER_RES);
 	lv_chart_set_type(chart, LV_CHART_TYPE_LINE);
 	lv_chart_set_div_line_count(chart, 5, 8);
-	lv_chart_set_range(chart, LV_CHART_AXIS_PRIMARY_Y, 0, 400);
+	lv_chart_set_range(chart, LV_CHART_AXIS_PRIMARY_Y, 0, 800);
 	lv_chart_set_update_mode(chart, LV_CHART_UPDATE_MODE_CIRCULAR);
 
 	for (int i = 0; i < 4; i++) {

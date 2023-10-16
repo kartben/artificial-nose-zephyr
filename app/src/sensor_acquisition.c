@@ -1,6 +1,7 @@
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/sys/ring_buffer.h>
+#include <zephyr/random/random.h>
 
 #include "drivers/sensor/multichannel_gas_v2/grove_multichannel_gas_v2.h"
 #include "sensor_acquisition.h"
@@ -10,7 +11,11 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(sensor_thread, CONFIG_APP_LOG_LEVEL);
 
+#if DT_HAS_COMPAT_STATUS_OKAY(seeed_grove_multichannel_gas_v2)
 const struct device *gas_sensor = DEVICE_DT_GET_ONE(seeed_grove_multichannel_gas_v2);
+#else
+const struct device *gas_sensor = NULL;
+#endif
 
 RING_BUF_DECLARE(sensor_data_ringbuf, EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE);
 K_SEM_DEFINE(sensor_data_ringbuf_sem, 1, 1);
@@ -29,7 +34,7 @@ void sensor_acquisition_fn(void *arg1, void *arg2, void *arg3)
 
 	struct sensor_value values[4];
 
-	if (!device_is_ready(gas_sensor)) {
+	if (gas_sensor != NULL && !device_is_ready(gas_sensor)) {
 		LOG_ERR("Gas sensor %s is not ready\n", gas_sensor->name);
 		while (1) {
 		}
@@ -37,6 +42,8 @@ void sensor_acquisition_fn(void *arg1, void *arg2, void *arg3)
 
 	while (1) {
 		k_sleep(K_MSEC(EI_CLASSIFIER_INTERVAL_MS));
+
+#if DT_HAS_COMPAT_STATUS_OKAY(seeed_grove_multichannel_gas_v2)
 
 		if (sensor_sample_fetch(gas_sensor)) {
 			LOG_ERR("Failed to fetch sample\n");
@@ -46,6 +53,12 @@ void sensor_acquisition_fn(void *arg1, void *arg2, void *arg3)
 		sensor_channel_get(gas_sensor, SENSOR_CHAN_CO, &values[1]);
 		sensor_channel_get(gas_sensor, SENSOR_CHAN_C2H5OH, &values[2]);
 		sensor_channel_get(gas_sensor, SENSOR_CHAN_VOC, &values[3]);
+#else
+		values[0].val1 = 200 + sys_rand32_get() % 60 - 30;
+		values[1].val1 = 10 + sys_rand32_get() % 5 - 2;
+		values[2].val1 = 30 + sys_rand32_get() % 10 - 5;
+		values[3].val1 = 4 + sys_rand32_get() % 2 - 1;
+#endif
 
 		k_sem_take(&sensor_data_ringbuf_sem, K_FOREVER);
 
@@ -53,6 +66,12 @@ void sensor_acquisition_fn(void *arg1, void *arg2, void *arg3)
 		if (ring_buf_space_get(&sensor_data_ringbuf) == 0) {
 			ring_buf_get(&sensor_data_ringbuf, NULL, 4);
 		}
+
+		/* TEMP workaround until buffer actually contains full integers */
+		values[0].val1 /= 4;
+		values[1].val1 /= 4;
+		values[2].val1 /= 4;
+		values[3].val1 /= 4;
 
 		ring_buf_put(&sensor_data_ringbuf, (uint8_t *)&values[0].val1, 1);
 		ring_buf_put(&sensor_data_ringbuf, (uint8_t *)&values[1].val1, 1);

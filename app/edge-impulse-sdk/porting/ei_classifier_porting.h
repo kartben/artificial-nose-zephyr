@@ -145,7 +145,7 @@ void ei_free(void *ptr);
 #endif
 
 #ifndef EI_PORTING_POSIX
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+#if !defined(__ZEPHYR__) && defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
 #define EI_PORTING_POSIX      1
 #else
 #define EI_PORTING_POSIX      0

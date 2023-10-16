@@ -30,7 +30,7 @@ int raw_feature_get_data(size_t offset, size_t length, float *out_ptr)
 	k_sem_give(&sensor_data_ringbuf_sem);
 
 	for (int i = 0; i < EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE; i++) {
-		out_ptr[i] = (float)buf[i];
+		out_ptr[i] = (float)(buf[i] * 4);
 	}
 
 	return 0;
@@ -65,7 +65,7 @@ void inference_fn(void *arg1, void *arg2, void *arg3)
 		features_signal.get_data = &raw_feature_get_data;
 
 		/* invoke the impulse */
-		EI_IMPULSE_ERROR res = run_classifier(&features_signal, &result, true);
+		EI_IMPULSE_ERROR res = run_classifier(&features_signal, &result, false);
 
 		if (res != 0) {
 			LOG_ERR("run_classifier returned: %d\n", res);
@@ -100,7 +100,7 @@ void inference_fn(void *arg1, void *arg2, void *arg3)
 
 		zbus_chan_pub(&inference_result_chan, &inf, K_MSEC(200));
 
-		k_msleep(2000);
+		k_msleep(50);
 	}
 }
 
