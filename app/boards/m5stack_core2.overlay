@@ -1,8 +1,17 @@
 &i2c1 {
 	status = "okay";
 
+	/**
+	 * Note: VCC on grove port is connected to VBUS output of AXP192
+	 * As of Zephyr 3.5, the AXP192 driver does not support VBUS so getting I2C1 to work
+	 * requires adding the following lines at the end of regulator_axp192_init():
+	 *
+	 *	ret = i2c_reg_update_byte_dt(&config->i2c, 0x10, 0x04, 0x04);
+	 *	ret = i2c_reg_update_byte_dt(&config->i2c, 0x90, 0x07, 0x07);
+	 */
+
 	gas_sensor: gas_sensor@8 {
-		status = "disabled";
+		status = "okay";
 		compatible = "seeed,grove-multichannel-gas-v2";
 		reg = <0x08>;
 	};
