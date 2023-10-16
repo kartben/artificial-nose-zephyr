@@ -2,7 +2,7 @@
 	status = "okay";
 
 	gas_sensor: gas_sensor@8 {
-		status = "okay";
+		status = "disabled";
 		compatible = "seeed,grove-multichannel-gas-v2";
 		reg = <0x08>;
 	};
