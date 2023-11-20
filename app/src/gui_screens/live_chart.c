@@ -13,11 +13,18 @@ extern "C" {
 
 ZBUS_CHAN_DECLARE(inference_result_chan);
 
+#define DISPLAY_NODE DT_CHOSEN(zephyr_display)
+#define DISPLAY_WIDTH  DT_PROP(DISPLAY_NODE, width)
+#define DISPLAY_HEIGHT DT_PROP(DISPLAY_NODE, height)
+#define IS_LARGE_SCREEN (DISPLAY_WIDTH > 240)
+
 static lv_obj_t *chart;
 static lv_chart_series_t *series[4];
 static lv_obj_t *inference_result_label;
+#if IS_LARGE_SCREEN
 static lv_obj_t *inference_result_confidence_meter;
 static lv_meter_indicator_t *inference_result_confidence_indic;
+#endif
 
 static lv_palette_t palette_colors[4] = {
 	LV_PALETTE_RED,
@@ -39,8 +46,10 @@ static void inference_cb(const struct zbus_channel *chan)
 	zbus_chan_read(chan, &msg, K_MSEC(200));
 
 	lv_label_set_text(inference_result_label, msg.label);
+#if IS_LARGE_SCREEN
 	lv_meter_set_indicator_value(inference_result_confidence_meter,
 				     inference_result_confidence_indic, msg.confidence * 100);
+#endif
 }
 
 ZBUS_LISTENER_DEFINE(inference_ui_listener, inference_cb);
@@ -88,6 +97,7 @@ void create_sensor_chart(lv_obj_t *parent)
 
 	lv_chart_set_point_count(chart, 400);
 
+	#if IS_LARGE_SCREEN
 	inference_result_confidence_meter = lv_meter_create(lv_scr_act());
 	lv_obj_center(inference_result_confidence_meter);
 	lv_obj_set_size(inference_result_confidence_meter, 110, 110);
@@ -104,9 +114,14 @@ void create_sensor_chart(lv_obj_t *parent)
 
 	inference_result_confidence_indic = lv_meter_add_needle_line(
 		inference_result_confidence_meter, scale, 4, lv_palette_main(LV_PALETTE_GREEN), -3);
+	#endif
 
 	inference_result_label = lv_label_create(lv_scr_act());
+#if IS_LARGE_SCREEN
 	lv_obj_align(inference_result_label, LV_ALIGN_CENTER, 0, 80);
+#else
+	lv_obj_align(inference_result_label, LV_ALIGN_CENTER, 0, 0);
+#endif
 
 	sensor_timer = lv_timer_create(sensor_timer_cb, 50, NULL);
 }
