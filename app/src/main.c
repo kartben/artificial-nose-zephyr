@@ -45,6 +45,14 @@ int main(void)
 	k_thread_name_set(&gui_thread, "GUI");
 #endif
 
+#ifdef CONFIG_APP_MQTT
+	/* Create MQTT pub thread */
+	k_thread_create(&mqtt_pub_thread, mqtt_pub_thread_stack,
+			K_THREAD_STACK_SIZEOF(mqtt_pub_thread_stack), mqtt_pub_fn, NULL, NULL, NULL,
+			K_PRIO_PREEMPT(20), 0, K_NO_WAIT);
+	k_thread_name_set(&mqtt_pub_thread, "MQTT Publisher");
+#endif
+
 	/* Create inference thread */
 	k_thread_create(&inference_thread, inference_thread_stack,
 			K_THREAD_STACK_SIZEOF(inference_thread_stack), inference_fn, NULL, NULL,

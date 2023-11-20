@@ -20,6 +20,10 @@ target_sources_ifdef(CONFIG_DISPLAY app PRIVATE
         src/gui_screens/live_chart.c
         )
 
+target_sources_ifdef(CONFIG_APP_MQTT app PRIVATE
+        src/mqtt.c
+        )
+
 include(edge-impulse-sdk/cmake/utils.cmake)
 
 # Add the Edge Impulse SDK

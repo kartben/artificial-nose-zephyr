@@ -21,3 +21,4 @@ manifest:
           - hal_espressif # ex. m5stack core 2
           - hal_atmel  # ex. wio terminal, ...
           - lvgl
+          - mbedtls

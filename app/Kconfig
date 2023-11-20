@@ -23,4 +23,33 @@ config APP_INFERENCE_PERIOD
         help
           How often to run the model inference.
 
-endmenu
+menuconfig APP_MQTT
+        bool "Enable MQTT"
+        default n
+        imply NETWORKING
+        imply NET_CONNECTION_MANAGER
+        imply NET_DHCPV4
+        imply DNS_RESOLVER
+        imply NET_TCP
+        imply MQTT_LIB
+        imply HWINFO       # used to compute the client ID
+        help
+          Enable MQTT support.
+
+if APP_MQTT
+
+config APP_MQTT_BROKER_HOSTNAME
+        string "MQTT broker hostname"
+        default "broker.hivemq.com"
+        help
+          Hostname of the MQTT broker.
+
+config APP_MQTT_BROKER_PORT
+        int "MQTT broker port"
+        default 1883
+        help
+          Port of the MQTT broker.
+
+endif # APP_MQTT
+
+endmenu # Artificial Nose
