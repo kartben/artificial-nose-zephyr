@@ -30,7 +30,7 @@
 #include "edge-impulse-sdk/classifier/ei_model_types.h"
 #include "edge-impulse-sdk/classifier/inferencing_engines/engines.h"
 
-const char* ei_classifier_inferencing_categories[] = { "ambient", "coffee" };
+const char* ei_classifier_inferencing_categories[] = { "ambient", "lemon", "thyme" };
 
 uint8_t ei_dsp_config_128_axes[] = { 0, 1, 2, 3 };
 const uint32_t ei_dsp_config_128_axes_size = 4;
@@ -44,14 +44,14 @@ ei_dsp_config_flatten_t ei_dsp_config_128 = {
     true, // boolean maximum
     true, // boolean rms
     true, // boolean stdev
-    true, // boolean skewness
-    true // boolean kurtosis
+    false, // boolean skewness
+    false // boolean kurtosis
 };
 
 const size_t ei_dsp_blocks_size = 1;
 ei_model_dsp_t ei_dsp_blocks[ei_dsp_blocks_size] = {
     { // DSP block 128
-        28,
+        20,
         &extract_flatten_features,
         (void*)&ei_dsp_config_128,
         ei_dsp_config_128_axes,
@@ -76,7 +76,7 @@ const ei_learning_block_config_tflite_graph_t ei_learning_block_config_143 = {
     .output_data_tensor = 0,
     .output_labels_tensor = 1,
     .output_score_tensor = 2,
-    .quantized = 0,
+    .quantized = 1,
     .compiled = 1,
     .graph_config = (void*)&ei_config_tflite_graph_143
 };
@@ -86,7 +86,7 @@ const ei_learning_block_config_anomaly_kmeans_t ei_learning_block_config_157 = {
     .anom_axis = ei_classifier_anom_axes,
     .anom_axes_size = 4,
     .anom_clusters = ei_classifier_anom_clusters,
-    .anom_cluster_count = 32,
+    .anom_cluster_count = 6,
     .anom_scale = ei_classifier_anom_scale,
     .anom_mean = ei_classifier_anom_mean,
 };
@@ -114,16 +114,16 @@ const ei_model_performance_calibration_t ei_calibration = {
     0   /* Don't use flags */
 };
 
-const ei_impulse_t impulse_2389_63 = {
+const ei_impulse_t impulse_2389_66 = {
     .project_id = 2389,
     .project_owner = "kartben",
     .project_name = "artificial_nose",
-    .deploy_version = 63,
+    .deploy_version = 66,
 
-    .nn_input_frame_size = 28,
-    .raw_sample_count = 20,
+    .nn_input_frame_size = 20,
+    .raw_sample_count = 40,
     .raw_samples_per_frame = 4,
-    .dsp_input_frame_size = 20 * 4,
+    .dsp_input_frame_size = 40 * 4,
     .input_width = 0,
     .input_height = 0,
     .input_frames = 0,
@@ -138,7 +138,7 @@ const ei_impulse_t impulse_2389_63 = {
     .object_detection_last_layer = EI_CLASSIFIER_LAST_LAYER_UNKNOWN,
     .fomo_output_size = 0,
     
-    .tflite_output_features_count = 2,
+    .tflite_output_features_count = 3,
     .learning_blocks_size = ei_learning_blocks_size,
     .learning_blocks = ei_learning_blocks,
 
@@ -146,15 +146,15 @@ const ei_impulse_t impulse_2389_63 = {
 
     .sensor = EI_CLASSIFIER_SENSOR_FUSION,
     .fusion_string = "Nitrogen dioxide + Carbon monoxide + Ethyl alcohol + Volatile organic compounds",
-    .slice_size = (20/4),
+    .slice_size = (40/4),
     .slices_per_model_window = 4,
 
     .has_anomaly = 1,
-    .label_count = 2,
+    .label_count = 3,
     .calibration = ei_calibration,
     .categories = ei_classifier_inferencing_categories
 };
 
-const ei_impulse_t ei_default_impulse = impulse_2389_63;
+const ei_impulse_t ei_default_impulse = impulse_2389_66;
 
 #endif // _EI_CLASSIFIER_MODEL_METADATA_H_
