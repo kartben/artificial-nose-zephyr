@@ -25,12 +25,12 @@ int raw_feature_get_data(size_t offset, size_t length, float *out_ptr)
 
 	k_sem_take(&sensor_data_ringbuf_sem, K_FOREVER);
 
-	uint8_t buf[EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE];
-	ring_buf_peek(&sensor_data_ringbuf, (uint8_t *)&buf, EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE);
+	uint32_t buf[EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE];
+	ring_buf_peek(&sensor_data_ringbuf, (uint8_t *)&buf, EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE * sizeof(uint32_t));
 	k_sem_give(&sensor_data_ringbuf_sem);
 
 	for (int i = 0; i < EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE; i++) {
-		out_ptr[i] = (float)(buf[i] * 4);
+		out_ptr[i] = (float)buf[i];
 	}
 
 	return 0;

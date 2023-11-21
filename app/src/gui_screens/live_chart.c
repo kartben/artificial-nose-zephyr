@@ -63,10 +63,10 @@ extern struct ring_buf sensor_data_ringbuf;
  */
 static void sensor_timer_cb(lv_timer_t *timer)
 {
-	uint8_t buffer[16];
+	uint32_t buffer[4];
 
 	k_sem_take(&sensor_data_ringbuf_sem, K_FOREVER);
-	int ret = ring_buf_peek(&sensor_data_ringbuf, buffer, 4);
+	int ret = ring_buf_peek(&sensor_data_ringbuf, (uint8_t*)buffer, 4 * sizeof(uint32_t));
 	k_sem_give(&sensor_data_ringbuf_sem);
 
 	if (ret < 4) {
@@ -74,7 +74,7 @@ static void sensor_timer_cb(lv_timer_t *timer)
 	}
 
 	for (int i = 0; i < 4; i++) {
-		lv_chart_set_next_value(chart, series[i], buffer[i] * 4);
+		lv_chart_set_next_value(chart, series[i], buffer[i]);
 	}
 }
 
