@@ -9,6 +9,7 @@ common:
   integration_platforms:
     - m5stack_core2
     - wio_terminal
+    - m5stack_atoms3
 tests:
   app.default: {}
   app.debug:
