@@ -8,29 +8,39 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
-    container: ghcr.io/zephyrproject-rtos/ci:v0.26.2
-    env:
-      CMAKE_PREFIX_PATH: /opt/toolchains
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           path: artificial-nose-zephyr
 
-      - name: Initialize
-        working-directory: artificial-nose-zephyr
-        run: |
-          west init -l .
-          west update -o=--depth=1 -n
-          west blobs fetch hal_espressif
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Setup Zephyr project
+        uses: fabiobaltieri/zephyr-setup@main
+        with:
+          app-path: artificial-nose-zephyr
+          toolchains: arm-zephyr-eabi:xtensa-espressif_esp32_zephyr-elf:xtensa-espressif_esp32s3_zephyr-elf
 
       - name: Build firmware
         working-directory: artificial-nose-zephyr
+        shell: bash
         run: |
-          west twister -T app -v --inline-logs --integration
+          west blobs fetch hal_espressif
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            EXTRA_TWISTER_FLAGS="--short-build-path -O/tmp/twister-out"
+          fi
+          west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
       - name: Twister Tests
         working-directory: artificial-nose-zephyr
+        shell: bash
         run: |
-          west twister -T tests --integration
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            EXTRA_TWISTER_FLAGS="--short-build-path -O/tmp/twister-out"
+          fi
+          west twister -T tests --inline-logs --integration $EXTRA_TWISTER_FLAGS
