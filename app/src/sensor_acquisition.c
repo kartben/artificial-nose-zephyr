@@ -68,6 +68,11 @@ void sensor_acquisition_fn(void *arg1, void *arg2, void *arg3)
 			ring_buf_get(&sensor_data_ringbuf, NULL, 4 * 4);
 		}
 
+#ifdef CONFIG_APP_PRINT_SENSOR_VALUES
+		printk("%d,%d,%d,%d\n", values[0].val1, values[1].val1, values[2].val1,
+		       values[3].val1);
+#endif
+
 		uint8_t no2[4] = sys_uint32_to_array(values[0].val1);
 		ring_buf_put(&sensor_data_ringbuf, no2, 4);
 

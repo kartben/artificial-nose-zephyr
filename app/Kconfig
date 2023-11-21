@@ -23,6 +23,12 @@ config APP_INFERENCE_PERIOD
         help
           How often to run the model inference.
 
+config APP_PRINT_SENSOR_VALUES
+        bool "Print sensor values"
+        default n
+        help
+          Print sensor values to the console (useful with the Edge Impulse Forwarder).
+
 menuconfig APP_MQTT
         bool "Enable MQTT"
         default n
