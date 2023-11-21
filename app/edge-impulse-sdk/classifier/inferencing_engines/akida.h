@@ -125,6 +125,11 @@ bool init_akida(const uint8_t *model_arr, size_t model_arr_size, bool debug)
         return false;
     }
 
+    if(debug) {
+        std::string ver = akida.attr("__version__").cast<std::string>();
+        ei_printf("DEBUG: Akida version: %s\n", ver.c_str());
+    }
+
     py::object Model = akida.attr("Model");
 
     // deploy akida model file into temporary file
@@ -143,6 +148,7 @@ bool init_akida(const uint8_t *model_arr, size_t model_arr_size, bool debug)
     }
     catch (py::error_already_set &e) {
         ei_printf("ERR: Can't load model file from %s\n", model_file_path);
+        ei_printf("ERR: %s\n", e.what());
         return false;
     }
 
@@ -207,6 +213,7 @@ bool init_akida(const uint8_t *model_arr, size_t model_arr_size, bool debug)
     }
     catch (py::error_already_set &e) {
         ei_printf("ERR: Can't load the ML model onto the AKD1000 SoC\n");
+        ei_printf("ERR: %s\n", e.what());
         return false;
     }
 #elif (defined(EI_CLASSIFIER_USE_AKIDA_SOFTWARE) && (EI_CLASSIFIER_USE_AKIDA_SOFTWARE == 1))

@@ -55,7 +55,7 @@
 #define EI_CLASSIFIER_PROJECT_ID                 2389
 #define EI_CLASSIFIER_PROJECT_OWNER              "kartben"
 #define EI_CLASSIFIER_PROJECT_NAME               "artificial_nose"
-#define EI_CLASSIFIER_PROJECT_DEPLOY_VERSION     62
+#define EI_CLASSIFIER_PROJECT_DEPLOY_VERSION     63
 #define EI_CLASSIFIER_NN_INPUT_FRAME_SIZE        28
 #define EI_CLASSIFIER_RAW_SAMPLE_COUNT           20
 #define EI_CLASSIFIER_RAW_SAMPLES_PER_FRAME      4
@@ -69,7 +69,6 @@
 #define EI_CLASSIFIER_HAS_ANOMALY                1
 #define EI_CLASSIFIER_FREQUENCY                  10
 #define EI_CLASSIFIER_HAS_MODEL_VARIABLES        1
-
 
 
 #define EI_CLASSIFIER_OBJECT_DETECTION            0
@@ -238,6 +237,8 @@ typedef struct {
     uint16_t implementation_version;
     int axes;
     bool scaling;
+    bool scaling_raw;
+    bool padding;
 } ei_dsp_config_imu_syntiant_t;
 
 #endif // _EI_CLASSIFIER_MODEL_METADATA_H_

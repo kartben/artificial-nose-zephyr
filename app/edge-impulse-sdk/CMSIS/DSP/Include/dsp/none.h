@@ -585,11 +585,11 @@ __STATIC_FORCEINLINE uint32_t __ROR(uint32_t op1, uint32_t op2)
   {
     return (sum + (int32_t) (((int64_t) x * y) >> 32));
   }
-
+#if defined ( _MSC_VER ) || defined(__GNUC_PYTHON__) || defined(__APPLE_CC__)
   // Rotate right, dual extract 8-bits and sign extend each to 16-bits.
   // rotate value must be 8,16 or 24
   // Patched by Edge Impulse to polyfill x86 support
-#if defined ( _MSC_VER ) || defined(__GNUC_PYTHON__) || defined(__APPLE_CC__)
+  // Patched by Edge Impulse for IAR Workbench
   __STATIC_FORCEINLINE uint32_t __SXTB16_RORn(uint32_t val1, uint32_t rotate)
   {
     uint32_t ret;

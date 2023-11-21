@@ -114,11 +114,11 @@ const ei_model_performance_calibration_t ei_calibration = {
     0   /* Don't use flags */
 };
 
-const ei_impulse_t impulse_2389_62 = {
+const ei_impulse_t impulse_2389_63 = {
     .project_id = 2389,
     .project_owner = "kartben",
     .project_name = "artificial_nose",
-    .deploy_version = 62,
+    .deploy_version = 63,
 
     .nn_input_frame_size = 28,
     .raw_sample_count = 20,
@@ -155,6 +155,6 @@ const ei_impulse_t impulse_2389_62 = {
     .categories = ei_classifier_inferencing_categories
 };
 
-const ei_impulse_t ei_default_impulse = impulse_2389_62;
+const ei_impulse_t ei_default_impulse = impulse_2389_63;
 
 #endif // _EI_CLASSIFIER_MODEL_METADATA_H_
