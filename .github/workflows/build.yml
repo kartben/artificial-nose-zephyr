@@ -23,6 +23,7 @@ jobs:
         run: |
           west init -l .
           west update -o=--depth=1 -n
+          west blobs fetch hal_espressif
 
       - name: Build firmware
         working-directory: artificial-nose-zephyr
