@@ -18,7 +18,7 @@ source "subsys/logging/Kconfig.template.log_config"
 
 config APP_INFERENCE_PERIOD
         int "Model inference period (milliseconds)"
-        default 50
+        default 250
         range 50 1000
         help
           How often to run the model inference.
