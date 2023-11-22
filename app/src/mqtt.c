@@ -284,9 +284,6 @@ static int try_to_connect(struct mqtt_client *client)
 #if defined(CONFIG_DNS_RESOLVER)
 static int get_mqtt_broker_addrinfo(void)
 {
-
-	printk("DNS lookup for %s\n", SERVER_ADDR);
-
 	int retries = 3;
 	int rc = -EINVAL;
 
@@ -426,8 +423,6 @@ static void inference_cb(const struct zbus_channel *chan)
 			LOG_ERR("mqtt_publish ERROR");
 		}
 	}
-
-	// printk("Inference result: %s\n", msg.label);
 }
 
 ZBUS_LISTENER_DEFINE(mqtt_publisher_listener, inference_cb);
