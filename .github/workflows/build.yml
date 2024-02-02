@@ -34,7 +34,7 @@ jobs:
           if [ "${{ runner.os }}" = "Windows" ]; then
             EXTRA_TWISTER_FLAGS="--short-build-path -O/tmp/twister-out"
           fi
-          west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
+          west twister -T app -v --inline-logs --integration -W $EXTRA_TWISTER_FLAGS
 
       - name: Twister Tests
         working-directory: artificial-nose-zephyr
@@ -43,4 +43,4 @@ jobs:
           if [ "${{ runner.os }}" = "Windows" ]; then
             EXTRA_TWISTER_FLAGS="--short-build-path -O/tmp/twister-out"
           fi
-          west twister -T tests --inline-logs --integration $EXTRA_TWISTER_FLAGS
+          west twister -T tests --inline-logs --integration -W $EXTRA_TWISTER_FLAGS
