@@ -7,9 +7,9 @@ sample:
 common:
   build_only: true
   integration_platforms:
-    - m5stack_core2
+    - m5stack_core2/esp32/procpu
     - wio_terminal
-    - m5stack_atoms3
+    - m5stack_atoms3/esp32s3/procpu
 tests:
   app.default: {}
   app.debug:
