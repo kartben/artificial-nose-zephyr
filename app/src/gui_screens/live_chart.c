@@ -42,13 +42,12 @@ static lv_timer_t *sensor_timer;
  */
 static void inference_cb(const struct zbus_channel *chan)
 {
-	struct inference_result_msg msg;
-	zbus_chan_read(chan, &msg, K_MSEC(200));
+	const struct inference_result_msg *msg = zbus_chan_const_msg(chan);
 
-	lv_label_set_text(inference_result_label, msg.label);
+	lv_label_set_text(inference_result_label, msg->label);
 #if IS_LARGE_SCREEN
 	lv_meter_set_indicator_value(inference_result_confidence_meter,
-				     inference_result_confidence_indic, msg.confidence * 100);
+				     inference_result_confidence_indic, msg->confidence * 100);
 #endif
 }
 
